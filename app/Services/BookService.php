@@ -1,15 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Models\Book;
+use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 
 class BookService
 {
+    protected BookRepository $bookRepository;
+
+    public function __construct(BookRepository $bookRepository)
+    {
+        $this->bookRepository = $bookRepository;
+    }
+
     public function getAllBooks()
     {
-        return Book::all();
+        return $this->bookRepository->all();
     }
 
     public function createBook(Request $request)
@@ -21,6 +30,6 @@ class BookService
             'available_copies' => 'required|integer|min:0',
         ]);
 
-        return Book::create($data);
+        return $this->bookRepository->create($data);
     }
 }
